@@ -83,10 +83,64 @@ h6 {
 }
 
 body {
-  font-family: Inter, sans-serif;
+  font-family: monospace, sans-serif;
   font-size: variables.$font-sm;
   color: variables.$default;
   background-color: variables.$primary-color;
+  @include mixins.flexbox(
+    $display: flex,
+    $justifyContent: center,
+    $alignItems: center
+  );
   min-width: 100vw;
   min-height: 100vh;
+  .container {
+    width: 60vw;
+    height: 50rem;
+    @include mixins.flexbox(
+      $display: flex,
+      $alignItems: center,
+      $direction: column
+    );
+    background: rgb(105, 182, 255);
+    background: linear-gradient(
+      90deg,
+      rgba(105, 182, 255, 1) 0%,
+      rgba(156, 225, 254, 1) 100%
+    );
+    margin: 0rem 1rem;
+    border-radius: 7px;
+    box-shadow: -1px 1px 17px 1px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: -1px 1px 17px 1px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: -1px 1px 17px 1px rgba(0, 0, 0, 0.15);
+    padding: 2.5rem 2rem;
+  }
+  .title {
+    font-size: 3rem;
+    font-weight: 700;
+  }
+
+  .subtitle {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-top: 3rem;
+  }
+
+  .wrapper {
+    width: 60%;
+    margin: 4rem 0rem;
+    @include mixins.flexbox(
+      $display: flex,
+      $justifyContent: center,
+      $alignItems: center
+    );
+  }
+
+  .results {
+  }
+
+  .message {
+    margin-top: 0.5rem;
+    color: green;
+  }
 }
