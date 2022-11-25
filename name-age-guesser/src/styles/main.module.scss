@@ -137,10 +137,30 @@ body {
   }
 
   .results {
+    @include mixins.flexbox(
+      $display: flex,
+      $direction: column,
+      $justifyContent: center,
+      $alignItems: center
+    );
+    p {
+      font-size: 2rem;
+      font-weight: 600;
+    }
+    ul {
+      margin: 1rem;
+      li {
+        font-weight: 700;
+        padding: 0.5rem;
+      }
+    }
   }
 
   .message {
-    margin-top: 0.5rem;
-    color: green;
+    margin: 0.5rem;
+    color: variables.$default;
+    background-color: aqua;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
   }
 }

@@ -2,44 +2,112 @@ import { useState, useEffect } from "react";
 import Button from "./components/Button/Button";
 import Input from "./components/Input/Input";
 import style from "./styles/main.module.scss";
+import API_URL from "./constants/api";
+import regEx from "./constants/regEx";
 
 function App() {
-  //handling controlled input
-  const [value, setValue] = useState("");
-  const inputHandler = (e) => {
-    setValue(e.target.value);
-  };
-  // handling state for guesses count
-  const [guesses, setGuesses] = useState(0);
-  //handling results
-  const [results, setResults] = useState([]);
+  //* STATE
+  const [data, setData] = useState({
+    value: "",
+    guesses: 0,
+    results: [],
+  });
 
-  // getting data from custom fetch hook
-  const handleFetch = async () => {
-    try {
-      const response = await fetch(`https://api.agify.io/?name=${value}`);
-      const json = await response.json();
-      setResults((prev) => [...prev, json]);
-    } catch (error) {
-      alert("ERROR FETCHING DATA!");
+  //* HANDLING CONTROLLED INPUT, CHECKING FOR NUMBERS IN INPUT
+
+  const inputHandler = (e) => {
+    if (!regEx.test(e.target.value)) {
+      alert("Enter a letters only please");
+    } else {
+      setData((prevState) => {
+        return {
+          ...prevState,
+          value: e.target.value,
+        };
+      });
     }
   };
 
+  //* HANDLING GUESSES COUNT
+  useEffect(() => {
+    const g = () => {
+      setData((prevState) => {
+        return {
+          ...prevState,
+          guesses: prevState.guesses,
+        };
+      });
+    };
+
+    return () => {
+      g();
+    };
+  }, [data.guesses, data.results]);
+  const guessHandler = () => {
+    setData((prevState) => {
+      return {
+        ...prevState,
+        guesses: prevState.guesses + 1,
+      };
+    });
+  };
+
+  //* HANDLING RESULTS
+  const resultsHandler = (data) => {
+    setData((prevState) => {
+      return {
+        ...prevState,
+        results: [...prevState.results, data],
+      };
+    });
+  };
+
+  //* HANDLING FETCHED DATA WITH SOME VALIDATION
+  const name = `${API_URL}${data.value}`;
+  const fetchHandler = async () => {
+    if (data.value.length <= 1) {
+      alert("Name should contain at least 2 charaters or more");
+    } else if (data.results.map((item) => item.name).includes(data.value)) {
+      alert("Enter another name, don't be greedy...");
+    } else {
+      try {
+        const response = await fetch(name);
+        const data = await response.json();
+        resultsHandler(data);
+        guessHandler();
+        //reset input value
+        setData((prevData) => {
+          return {
+            ...prevData,
+            value: "",
+          };
+        });
+      } catch (error) {
+        alert("ERROR FETCHING DATA!!!");
+      }
+    }
+  };
+
+  // console.log(data.results.map((item) => item.name).includes(data.value));
   return (
     <div className={style.container}>
       <h1 className={style.title}>Name Age Guesser</h1>
-      <span className={style.subtitle}>Total guesses: {guesses}</span>
-      <span className={style.message}>What an odd number of guesses!”</span>
+      <span className={style.subtitle}>Total guesses: {data.guesses}</span>
+      {data.guesses % 2 !== 0 && (
+        <span className={style.message}>What an odd number of guesses!</span>
+      )}
       <div className={style.wrapper}>
-        <Input value={value} onChange={inputHandler} />
-        <Button onClick={handleFetch} />
+        <Input value={data.value} onChange={inputHandler} />
+        <Button onClick={fetchHandler} />
       </div>
       <div className={style.results}>
-        All guesses:
+        <p>All guesses:</p>
         <ul>
-          {results.map((item) => (
+          {data.results.map((item) => (
             <li key={item.name}>
-              {item.name} - {item.age}
+              {item.name} -{" "}
+              <span style={{ backgroundColor: "aquamarine" }}>{item.age}</span>{" "}
+              years
             </li>
           ))}
         </ul>
