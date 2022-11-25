@@ -13,7 +13,7 @@ function App() {
     results: [],
   });
 
-  //* HANDLING CONTROLLED INPUT, CHECKING FOR NUMBERS IN INPUT
+  //* HANDLING CONTROLLED INPUT, CHECKING FOR NUMBERS & SPECIAL CHARACTERS IN INPUT
 
   const inputHandler = (e) => {
     if (!regEx.test(e.target.value)) {
@@ -74,21 +74,24 @@ function App() {
         const response = await fetch(name);
         const data = await response.json();
         resultsHandler(data);
-        guessHandler();
-        //reset input value
-        setData((prevData) => {
-          return {
-            ...prevData,
-            value: "",
-          };
-        });
       } catch (error) {
         alert("ERROR FETCHING DATA!!!");
       }
     }
   };
 
-  // console.log(data.results.map((item) => item.name).includes(data.value));
+  const submitHandler = () => {
+    fetchHandler();
+    guessHandler();
+    //reset input value
+    setData((prevData) => {
+      return {
+        ...prevData,
+        value: "",
+      };
+    });
+  };
+
   return (
     <div className={style.container}>
       <h1 className={style.title}>Name Age Guesser</h1>
@@ -98,7 +101,7 @@ function App() {
       )}
       <div className={style.wrapper}>
         <Input value={data.value} onChange={inputHandler} />
-        <Button onClick={fetchHandler} />
+        <Button onClick={submitHandler} />
       </div>
       <div className={style.results}>
         <p>All guesses:</p>

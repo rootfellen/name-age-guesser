@@ -1,4 +1,5 @@
 @use "../../styles/variables.scss";
+@use "../../styles/mixins.scss";
 
 .input {
   margin-top: 0.4rem;
@@ -8,5 +9,11 @@
     box-shadow: 0px 0px 0px 2px rgba(27, 33, 79, 0.75);
     -webkit-box-shadow: 0px 0px 0px 2px rgba(27, 33, 79, 0.75);
     -moz-box-shadow: 0px 0px 0px 2px rgba(27, 33, 79, 0.75);
+  }
+}
+
+.label {
+  @include mixins.breakpoint-down(medium) {
+    text-align: center;
   }
 }
