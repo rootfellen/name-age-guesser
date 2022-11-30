@@ -1,7 +1,7 @@
 @use "../../styles//variables.scss";
 @use "../../styles//mixins.scss";
 .button {
-  width: 20%;
+  min-width: 20%;
   padding: 1.5rem;
   margin: 1.4rem 0rem 0rem 1rem;
   transition: all 0.3s ease-in-out;
